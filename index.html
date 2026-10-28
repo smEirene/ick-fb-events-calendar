@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>F&amp;B Events Calendar | InterContinental Kaohsiung</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#F8F5EE; --surface:#FFFFFF; --ink:#13254A; --muted:#5D6880; --line:#E3DCCB;
+  --gold:#9C7A2A; --gold-soft:#F3EAD3; --jade:#2F6B5C; --jade-soft:#E1EEE9;
+  --amber:#A8611F; --amber-soft:#F6E6D6; --mast:#13254A; --mast-ink:#F5EDD6;
+  --serif:"Noto Serif TC","Songti TC",Georgia,serif;
+  --sans:Arial,"Helvetica Neue","PingFang TC","Microsoft JhengHei",sans-serif;
+  color-scheme:light;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#0C1730; --surface:#132344; --ink:#F2EBDA; --muted:#A7B0C4; --line:#24375E;
+    --gold:#D6B868; --gold-soft:#2A3350; --jade:#7DC0AC; --jade-soft:#1A3A3F;
+    --amber:#E3A468; --amber-soft:#3A2F2E; --mast:#081124; --mast-ink:#F5EDD6;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0C1730; --surface:#132344; --ink:#F2EBDA; --muted:#A7B0C4; --line:#24375E;
+  --gold:#D6B868; --gold-soft:#2A3350; --jade:#7DC0AC; --jade-soft:#1A3A3F;
+  --amber:#E3A468; --amber-soft:#3A2F2E; --mast:#081124; --mast-ink:#F5EDD6;
+  color-scheme:dark;
+}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.55;-webkit-font-smoothing:antialiased}
+button{font:inherit;color:inherit}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+
+.mast{background:var(--mast);color:var(--mast-ink);padding:36px 20px 28px}
+.mast-in{max-width:1120px;margin:0 auto}
+.hotel{font-size:14px;letter-spacing:.04em;opacity:.8;margin:0 0 18px}
+.title-row{display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.month{font-family:var(--serif);font-weight:500;font-size:clamp(40px,7vw,68px);line-height:1;margin:0;letter-spacing:.01em}
+.month small{display:block;font-family:var(--sans);font-size:15px;letter-spacing:.05em;opacity:.75;margin-top:10px;font-weight:400}
+.nav{display:flex;gap:8px;margin-left:auto}
+.nav button{width:44px;height:44px;border-radius:50%;border:1px solid rgba(201,168,76,.55);background:transparent;color:var(--mast-ink);cursor:pointer;font-size:18px}
+.nav button:hover:not(:disabled){background:rgba(201,168,76,.18)}
+.nav button:disabled{opacity:.3;cursor:default}
+.deco{display:flex;align-items:center;gap:10px;margin:26px 0 20px}
+.deco::before,.deco::after{content:"";flex:1;height:3px;border-top:1px solid #C9A84C;border-bottom:1px solid #C9A84C}
+.deco span{width:10px;height:10px;background:#C9A84C;transform:rotate(45deg)}
+.filters{display:flex;gap:8px;flex-wrap:wrap}
+.chip{border:1px solid rgba(245,237,214,.35);background:transparent;color:var(--mast-ink);padding:8px 16px;border-radius:999px;cursor:pointer;font-size:14px}
+.chip[aria-pressed="true"]{background:#C9A84C;border-color:#C9A84C;color:#13254A}
+
+main{max-width:1120px;margin:0 auto;padding:28px 20px 48px;display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:32px;align-items:start}
+@media (max-width:860px){main{grid-template-columns:1fr}}
+
+.cal{background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:16px}
+.dow,.days{display:grid;grid-template-columns:repeat(7,minmax(0,1fr))}
+.dow div{font-size:12px;color:var(--muted);text-align:center;padding:4px 0 10px}
+.days{gap:4px}
+.day{min-height:84px;border-radius:4px;padding:6px;background:transparent;border:1px solid transparent;text-align:left;display:flex;flex-direction:column;gap:4px}
+.day.blank{visibility:hidden}
+.day .n{font-size:13px;color:var(--muted)}
+.day.has{border-color:var(--line);cursor:pointer;background:var(--bg)}
+.day.has:hover{border-color:var(--gold)}
+.day.has .n{color:var(--ink);font-weight:700}
+.day.today .n{color:var(--gold)}
+.day.past{opacity:.5}
+.pill{font-size:11px;line-height:1.3;padding:3px 5px;border-radius:3px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.o-waRA{background:var(--jade-soft);color:var(--jade)}
+.o-hawker{background:var(--amber-soft);color:var(--amber)}
+@media (max-width:560px){
+  .day{min-height:52px;align-items:center}
+  .pill{width:8px;height:8px;padding:0;border-radius:50%;font-size:0}
+  .o-waRA.pill{background:var(--jade)} .o-hawker.pill{background:var(--amber)}
+}
+.legend{display:flex;gap:16px;margin-top:14px;font-size:13px;color:var(--muted)}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:6px;vertical-align:-1px}
+
+.list h2{font-family:var(--serif);font-weight:500;font-size:22px;margin:0 0 14px}
+.empty{color:var(--muted);padding:20px 0}
+.ev{background:var(--surface);border:1px solid var(--line);border-radius:6px;margin-bottom:12px;scroll-margin-top:16px}
+.ev.flash{border-color:var(--gold)}
+.ev-head{width:100%;display:grid;grid-template-columns:62px 1fr auto;gap:14px;align-items:center;padding:16px;background:none;border:0;text-align:left;cursor:pointer}
+.date{text-align:center;border-right:1px solid var(--line);padding-right:12px}
+.date b{display:block;font-family:var(--serif);font-size:30px;font-weight:700;line-height:1}
+.date span{font-size:12px;color:var(--muted)}
+.outlet{font-size:12px;font-weight:700;letter-spacing:.03em}
+.outlet.o-waRA{background:none;color:var(--jade)} .outlet.o-hawker{background:none;color:var(--amber)}
+.ev-title{font-family:var(--serif);font-size:18px;font-weight:500;line-height:1.35;margin:2px 0}
+.ev-time{font-size:14px;color:var(--muted)}
+.chev{transition:transform .2s;color:var(--muted)}
+.ev[open-state="1"] .chev{transform:rotate(180deg)}
+.ev-body{display:none;padding:0 16px 18px 92px}
+.ev[open-state="1"] .ev-body{display:block}
+@media (max-width:480px){.ev-body{padding-left:16px}}
+dl{margin:0;display:grid;grid-template-columns:auto 1fr;gap:6px 16px;font-size:14px}
+dt{color:var(--muted)} dd{margin:0}
+.tbc{display:inline-block;border:1px dashed var(--gold);color:var(--gold);padding:0 8px;border-radius:3px;font-size:13px}
+.past-tag{display:inline-block;font-size:12px;color:var(--muted);border:1px solid var(--line);border-radius:3px;padding:0 6px;margin-left:8px;vertical-align:2px}
+.post{display:inline-block;margin-top:14px;font-size:14px;color:var(--gold);text-decoration:underline;text-underline-offset:3px}
+
+footer{max-width:1120px;margin:0 auto;padding:0 20px 40px;font-size:13px;color:var(--muted)}
+footer p{margin:4px 0}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<header class="mast">
+  <div class="mast-in">
+    <p class="hotel">InterContinental Kaohsiung  F&amp;B Events</p>
+    <div class="title-row">
+      <h1 class="month" id="monthTitle">November 2026<small id="monthSub"></small></h1>
+      <div class="nav">
+        <button id="prev" aria-label="Previous month">‹</button>
+        <button id="next" aria-label="Next month">›</button>
+      </div>
+    </div>
+    <div class="deco" aria-hidden="true"><span></span></div>
+    <div class="filters" role="group" aria-label="Filter by outlet">
+      <button class="chip" data-f="all" aria-pressed="true">All outlets</button>
+      <button class="chip" data-f="hawker" aria-pressed="false">HAWKER</button>
+      <button class="chip" data-f="waRA" aria-pressed="false">WA-RA</button>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section class="cal" aria-label="Month view">
+    <div class="dow"><div>Sun</div><div>Mon</div><div>Tue</div><div>Wed</div><div>Thu</div><div>Fri</div><div>Sat</div></div>
+    <div class="days" id="days"></div>
+    <div class="legend">
+      <span><i style="background:var(--amber)"></i>HAWKER</span>
+      <span><i style="background:var(--jade)"></i>WA-RA</span>
+    </div>
+  </section>
+  <section class="list" aria-live="polite">
+    <h2 id="listTitle">Events</h2>
+    <div id="events"></div>
+  </section>
+</main>
+
+<footer>
+  <p>Prices are subject to a 10% service charge. Special menus are not eligible for other F&amp;B discounts or offers.</p>
+  <p>Alcohol is served only to guests aged 18 and over. Please drink responsibly.</p>
+  <p>【AI 草稿】Internal reference. Pending review by F&amp;B and Marcom management.</p>
+</footer>
+
+<script>
+const EVENTS = [
+  {id:"kaze", date:"2026-10-24", outlet:"waRA", outletName:"WA-RA KAPPO",
+   title:"Kaze no Mori: Autumn Seasonal Gathering", sub:"Kappo dinner",
+   time:"Seating 18:30, dinner 19:00", venue:"WA-RA",
+   price:"NT$3,680 + 10% per set", note:"Special menu, not eligible for F&B discounts",
+   link:"https://www.instagram.com/p/DeRZ_SmgfpD/", linkLabel:"View Instagram post"},
+  {id:"oldworld", date:"2026-10-30", outlet:"hawker", outletName:"HAWKER",
+   title:"Old World, New World", sub:"Wine Dinner",
+   time:"Seating 18:00, dinner 18:30", venue:"HAWKER, 2F",
+   price:"NT$2,680 + 10% per person", note:"Six courses paired with five wines. Special menu, not eligible for other offers",
+   link:"https://www.facebook.com/share/1F9Xpu7Q85/", linkLabel:"View Facebook post"},
+  {id:"hyakki", date:"2026-10-31", outlet:"waRA", outletName:"WA-RA",
+   title:"Hyakki Yagyō: Night Parade of Spirits", sub:"Halloween night",
+   time:"22:30 to 00:30", venue:"WA-RA",
+   price:"NT$980 + 10% per person", note:"Two hours of free flow drinks. One night only",
+   link:"https://www.instagram.com/p/DemLCHHAbcK/", linkLabel:"View Instagram post"},
+  {id:"lampbar", date:"2026-11-10", outlet:"waRA", outletName:"WA-RA",
+   title:"THE BAR HARBOUR: LAMP BAR NARA", sub:"Guest bartender Michito Kaneko",
+   time:"20:00 to 23:00", venue:"WA-RA",
+   price:null, note:"Guest bar takeover",
+   link:"https://www.instagram.com/p/Det622BAQvB/", linkLabel:"View Instagram post"},
+  {id:"kappowine", date:"2026-11-20", outlet:"waRA", outletName:"WA-RA KAPPO",
+   title:"Autumn Kappo Pairing Dinner", sub:"Pacific saury and crab, wine and non-alcoholic pairings",
+   time:"Seating 18:30, dinner 19:00", venue:"WA-RA",
+   price:null, note:"Autumn Pacific saury and crab at their richest, paired two ways: non-alcoholic creations alongside classic red and white wines",
+   link:null},
+  {id:"pairing2", date:"2026-11-20", outlet:"hawker", outletName:"HAWKER",
+   title:"HAWKER Pairing Series, Chapter 2", sub:"Wine Discovery × Jiu Zhai",
+   time:null, venue:"HAWKER, 2F",
+   price:null, note:"Wine pairing dinner",
+   link:null}
+];
+const MONTHS = [{y:2026,m:9},{y:2026,m:10}]; // Oct, Nov (0-based months)
+const MNAME = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+const DOW = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
+const TODAY = (() => { const t = new Date(); return new Date(t.getFullYear(), t.getMonth(), t.getDate()); })();
+let idx = location.hash === "#oct" ? 0 : 1;
+let filter = "all";
+let openId = null;
+
+const tbc = '<span class="tbc">To be confirmed</span>';
+const parse = s => { const [y,m,d] = s.split("-").map(Number); return new Date(y,m-1,d); };
+const visible = () => EVENTS.filter(e => filter === "all" || e.outlet === filter);
+
+function render(){
+  const {y,m} = MONTHS[idx];
+  const monthEvents = visible().filter(e => { const d = parse(e.date); return d.getFullYear()===y && d.getMonth()===m; });
+  document.getElementById("monthTitle").firstChild.nodeValue = MNAME[m] + " " + y;
+  const n = monthEvents.length;
+  document.getElementById("monthSub").textContent = n === 0 ? "No events listed" : n + (n === 1 ? " event" : " events");
+  document.getElementById("prev").disabled = idx === 0;
+  document.getElementById("next").disabled = idx === MONTHS.length - 1;
+  try{ history.replaceState(null,"", idx === 0 ? "#oct" : "#nov"); }catch(e){}
+
+  const days = document.getElementById("days");
+  days.innerHTML = "";
+  const first = new Date(y,m,1).getDay();
+  const count = new Date(y,m+1,0).getDate();
+  for(let i=0;i<first;i++){ const b=document.createElement("div"); b.className="day blank"; days.appendChild(b); }
+  for(let d=1; d<=count; d++){
+    const date = new Date(y,m,d);
+    const evs = monthEvents.filter(e => parse(e.date).getDate() === d);
+    const el = document.createElement(evs.length ? "button" : "div");
+    el.className = "day" + (evs.length ? " has" : "") + (date < TODAY && evs.length ? " past" : "") +
+      (date.getTime() === TODAY.getTime() ? " today" : "");
+    el.innerHTML = '<span class="n">' + d + '</span>' +
+      evs.map(e => '<span class="pill o-' + e.outlet + '">' + e.outletName.split(" ")[0] + '</span>').join("");
+    if(evs.length){
+      el.setAttribute("aria-label", MNAME[m] + " " + d + ": " + evs.map(e => e.title).join(", "));
+      el.addEventListener("click", () => openEvent(evs[0].id, true));
+    }
+    days.appendChild(el);
+  }
+
+  document.getElementById("listTitle").textContent = "Events in " + MNAME[m];
+  const list = document.getElementById("events");
+  if(!n){ list.innerHTML = '<p class="empty">No events match this filter. Choose All outlets to see the full month.</p>'; return; }
+  list.innerHTML = monthEvents.map(e => {
+    const d = parse(e.date), past = d < TODAY;
+    return '<article class="ev" id="ev-' + e.id + '" open-state="' + (openId === e.id ? 1 : 0) + '">' +
+      '<button class="ev-head" aria-expanded="' + (openId === e.id) + '" data-id="' + e.id + '">' +
+        '<div class="date"><b>' + d.getDate() + '</b><span>' + DOW[d.getDay()] + '</span></div>' +
+        '<div><div class="outlet o-' + e.outlet + '">' + e.outletName + (past ? '<span class="past-tag">Past</span>' : '') + '</div>' +
+        '<div class="ev-title">' + e.title + '</div>' +
+        '<div class="ev-time">' + e.sub + '</div></div>' +
+        '<span class="chev" aria-hidden="true">▾</span>' +
+      '</button>' +
+      '<div class="ev-body"><dl>' +
+        '<dt>Time</dt><dd>' + (e.time || tbc) + '</dd>' +
+        '<dt>Venue</dt><dd>' + e.venue + '</dd>' +
+        '<dt>Price</dt><dd>' + (e.price || tbc) + '</dd>' +
+        '<dt>Notes</dt><dd>' + e.note + '</dd>' +
+      '</dl>' +
+      (e.link ? '<a class="post" href="' + e.link + '" target="_blank" rel="noopener">' + e.linkLabel + '</a>' : '<p class="post" style="text-decoration:none">Post to be published</p>') +
+      '</div></article>';
+  }).join("");
+  list.querySelectorAll(".ev-head").forEach(b => b.addEventListener("click", () => {
+    openId = openId === b.dataset.id ? null : b.dataset.id; render();
+  }));
+}
+
+function openEvent(id, scroll){
+  openId = id; render();
+  const card = document.getElementById("ev-" + id);
+  if(card && scroll){
+    card.scrollIntoView({behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth", block:"start"});
+    card.classList.add("flash"); setTimeout(() => card.classList.remove("flash"), 1200);
+  }
+}
+
+document.getElementById("prev").onclick = () => { if(idx>0){ idx--; openId=null; render(); } };
+document.getElementById("next").onclick = () => { if(idx<MONTHS.length-1){ idx++; openId=null; render(); } };
+document.querySelectorAll(".chip").forEach(c => c.addEventListener("click", () => {
+  filter = c.dataset.f;
+  document.querySelectorAll(".chip").forEach(x => x.setAttribute("aria-pressed", x === c));
+  render();
+}));
+render();
+</script>
+</body>
+</html>
